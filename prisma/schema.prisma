@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Alumni {
+  id              String        @id @default(uuid())
+  name            String
+  email           String        @unique
+  graduationYear  Int
+  major           String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  tokens          SurveyToken[]
+
+  @@index([email])
+  @@index([graduationYear])
+}
+
+model Survey {
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  questions   Json          // Array of question objects
+  isActive    Boolean       @default(true)
+  deadline    DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  tokens      SurveyToken[]
+  responses   Response[]
+
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+model SurveyToken {
+  id          String    @id @default(uuid())
+  tokenHash   String    @unique // SHA-256 hash
+  surveyId    String
+  alumniId    String
+  isUsed      Boolean   @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  usedAt      DateTime?
+
+  survey      Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  alumni      Alumni    @relation(fields: [alumniId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyId, alumniId]) // One token per alumni per survey
+  @@index([tokenHash])
+  @@index([expiresAt])
+  @@index([isUsed])
+}
+
+model Response {
+  id          String    @id @default(uuid())
+  surveyId    String
+  tokenHash   String    // Reference to token used (for audit)
+  answers     Json      // Array of answer objects
+  submittedAt DateTime  @default(now())
+
+  survey      Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@index([surveyId])
+  @@index([submittedAt])
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String   // Bcrypt hashed (12 rounds)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([username])
+}
