@@ -2,13 +2,13 @@ import { SurveyForm } from '@/components/forms/SurveyForm';
 import { validateSurveyToken } from '@/app/actions/token.actions';
 
 interface SurveyPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 export default async function SurveyPage({ params }: SurveyPageProps) {
-  const token = params.token;
+  const { token } = await params;
 
   try {
     const validation = await validateSurveyToken(token);

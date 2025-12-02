@@ -26,7 +26,7 @@ export function AdminLoginForm() {
       const result = await loginAdmin(formData);
 
       if (result.success) {
-        router.push('/admin/dashboard');
+        router.push('/dashboard');
       } else {
         setError(result.error || 'Login gagal');
       }

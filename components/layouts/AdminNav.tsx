@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { logoutAdmin } from '@/app/actions/auth.actions';
-import { Home, Users, FileText, BarChart, LogOut } from 'lucide-react';
+import { Home, Users, FileText, BarChart, Key, Settings, LogOut } from 'lucide-react';
 
 export function AdminNav() {
   const pathname = usePathname();
@@ -18,7 +18,9 @@ export function AdminNav() {
     { name: 'Dashboard', href: '/admin/dashboard', icon: Home },
     { name: 'Alumni', href: '/admin/alumni', icon: Users },
     { name: 'Survey', href: '/admin/surveys', icon: FileText },
-    { name: 'Statistik', href: '/admin/statistics', icon: BarChart },
+    { name: 'Response', href: '/admin/responses', icon: BarChart },
+    { name: 'Tokens', href: '/admin/tokens', icon: Key },
+    { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 
   return (
