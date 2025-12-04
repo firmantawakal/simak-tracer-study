@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching alumni:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch alumni' },
+      { error: 'Gagal mengambil data alumni' },
       { status: 500 }
     );
   }
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     if (existingAlumni) {
       return NextResponse.json(
-        { error: 'Email already exists' },
+        { error: 'Email sudah terdaftar' },
         { status: 400 }
       );
     }
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating alumni:', error);
     return NextResponse.json(
-      { error: 'Failed to create alumni' },
+      { error: 'Gagal menambah alumni' },
       { status: 500 }
     );
   }

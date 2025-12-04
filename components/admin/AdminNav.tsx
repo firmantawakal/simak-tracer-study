@@ -20,7 +20,7 @@ const menuItems = [
   },
   {
     href: '/admin/alumni',
-    label: 'Alumni',
+    label: 'Data Alumni',
     icon: Users
   },
   {
@@ -102,7 +102,7 @@ export function AdminNav() {
             className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-900 hover:bg-red-50 transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden md:inline">Logout</span>
+            <span className="hidden md:inline">Keluar</span>
           </button>
         </div>
       </div>

@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: Params) {
 
     if (!alumni) {
       return NextResponse.json(
-        { error: 'Alumni not found' },
+        { error: 'Alumni tidak ditemukan' },
         { status: 404 }
       );
     }
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest, { params }: Params) {
   } catch (error) {
     console.error('Error fetching alumni:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch alumni' },
+      { error: 'Gagal mengambil data alumni' },
       { status: 500 }
     );
   }
@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
     if (existingAlumni) {
       return NextResponse.json(
-        { error: 'Email already exists' },
+        { error: 'Email sudah terdaftar' },
         { status: 400 }
       );
     }
@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
   } catch (error) {
     console.error('Error updating alumni:', error);
     return NextResponse.json(
-      { error: 'Failed to update alumni' },
+      { error: 'Gagal memperbarui alumni' },
       { status: 500 }
     );
   }
@@ -91,14 +91,14 @@ export async function DELETE(request: NextRequest, { params }: Params) {
 
     if (!relatedData) {
       return NextResponse.json(
-        { error: 'Alumni not found' },
+        { error: 'Alumni tidak ditemukan' },
         { status: 404 }
       );
     }
 
     if (relatedData._count.tokens > 0) {
       return NextResponse.json(
-        { error: 'Cannot delete alumni with existing survey tokens. Please delete the tokens first.' },
+        { error: 'Tidak dapat menghapus alumni yang memiliki token survei. Silakan hapus token terlebih dahulu.' },
         { status: 400 }
       );
     }
@@ -107,11 +107,11 @@ export async function DELETE(request: NextRequest, { params }: Params) {
       where: { id }
     });
 
-    return NextResponse.json({ message: 'Alumni deleted successfully' });
+    return NextResponse.json({ message: 'Alumni berhasil dihapus' });
   } catch (error) {
     console.error('Error deleting alumni:', error);
     return NextResponse.json(
-      { error: 'Failed to delete alumni' },
+      { error: 'Gagal menghapus alumni' },
       { status: 500 }
     );
   }
