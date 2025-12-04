@@ -70,24 +70,24 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
 
       if (editingAlumni) {
         setAlumni(alumni.map(a => a.id === editingAlumni.id ? savedAlumni : a));
-        setAlert({ type: 'success', message: 'Alumni updated successfully!' });
+        setAlert({ type: 'success', message: 'Alumni berhasil diperbarui!' });
       } else {
         setAlumni([...alumni, savedAlumni]);
-        setAlert({ type: 'success', message: 'Alumni added successfully!' });
+        setAlert({ type: 'success', message: 'Alumni berhasil ditambahkan!' });
       }
 
       setShowModal(false);
       setEditingAlumni(null);
       setFormData({ name: '', email: '', graduationYear: new Date().getFullYear(), major: '' });
     } catch (error) {
-      setAlert({ type: 'error', message: 'Failed to save alumni' });
+      setAlert({ type: 'error', message: 'Gagal menyimpan data alumni' });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this alumni?')) return;
+    if (!confirm('Apakah Anda yakin ingin menghapus alumni ini?')) return;
 
     try {
       const response = await fetch(`/api/admin/alumni/${id}`, {
@@ -97,9 +97,9 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
       if (!response.ok) throw new Error('Failed to delete alumni');
 
       setAlumni(alumni.filter(a => a.id !== id));
-      setAlert({ type: 'success', message: 'Alumni deleted successfully!' });
+      setAlert({ type: 'success', message: 'Alumni berhasil dihapus!' });
     } catch (error) {
-      setAlert({ type: 'error', message: 'Failed to delete alumni' });
+      setAlert({ type: 'error', message: 'Gagal menghapus alumni' });
     }
   };
 
@@ -137,15 +137,15 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Alumni Management</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Manajemen Alumni</h1>
         <div className="flex space-x-3">
           <Button onClick={handleExportCSV} variant="outline">
             <Download className="h-4 w-4 mr-2" />
-            Export CSV
+            Ekspor CSV
           </Button>
           <Button onClick={() => setShowModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Alumni
+            Tambah Alumni
           </Button>
         </div>
       </div>
@@ -164,26 +164,26 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
-              placeholder="Search alumni..."
+              placeholder="Cari alumni..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
             />
           </div>
           <div className="text-sm text-gray-500">
-            Showing {paginatedAlumni.length} of {filteredAlumni.length} alumni
+            Menampilkan {paginatedAlumni.length} dari {filteredAlumni.length} alumni
           </div>
         </div>
 
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>Nama</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Graduation Year</TableHead>
-              <TableHead>Major</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>Tahun Lulus</TableHead>
+              <TableHead>Jurusan</TableHead>
+              <TableHead>Dibuat</TableHead>
+              <TableHead>Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -236,12 +236,12 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
           setEditingAlumni(null);
           setFormData({ name: '', email: '', graduationYear: new Date().getFullYear(), major: '' });
         }}
-        title={editingAlumni ? 'Edit Alumni' : 'Add New Alumni'}
+        title={editingAlumni ? 'Edit Alumni' : 'Tambah Alumni Baru'}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
+              Nama
             </label>
             <Input
               type="text"
@@ -265,7 +265,7 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Graduation Year
+              Tahun Lulus
             </label>
             <Input
               type="number"
@@ -279,7 +279,7 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Major
+              Jurusan
             </label>
             <Input
               type="text"
@@ -295,11 +295,11 @@ export function AlumniManagement({ initialAlumni, totalAlumni }: AlumniManagemen
               variant="outline"
               onClick={() => setShowModal(false)}
             >
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? <LoadingSpinner className="h-4 w-4 mr-2" /> : null}
-              {editingAlumni ? 'Update Alumni' : 'Add Alumni'}
+              {editingAlumni ? 'Perbarui Alumni' : 'Tambah Alumni'}
             </Button>
           </div>
         </form>
