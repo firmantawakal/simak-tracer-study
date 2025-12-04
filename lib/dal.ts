@@ -11,7 +11,7 @@ export interface AdminUser {
 }
 
 export async function verifyAdmin(): Promise<AdminUser> {
-  const token = cookies().get('admin-token')?.value;
+  const token = (await cookies()).get('admin-token')?.value;
 
   if (!token) {
     throw new Error('Unauthorized: No token provided');
@@ -37,5 +37,17 @@ export async function verifyAdmin(): Promise<AdminUser> {
     return admin;
   } catch (error) {
     throw new Error('Unauthorized: Invalid token');
+  }
+}
+
+export function verifyAdminToken(token: string): boolean {
+  try {
+    // Use the same fallback as the login API
+    const secret = process.env.JWT_SECRET || 'fallback-secret-key';
+    jwt.verify(token, secret);
+    return true;
+  } catch (error) {
+    console.log('Token verification error in DAL:', error.message);
+    return false;
   }
 }

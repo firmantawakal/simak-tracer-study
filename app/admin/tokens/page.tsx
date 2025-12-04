@@ -4,19 +4,8 @@ import { prisma } from '@/lib/prisma';
 export default async function TokensPage() {
   const tokens = await prisma.surveyToken.findMany({
     include: {
-      survey: {
-        select: {
-          id: true,
-          title: true,
-        }
-      },
-      alumni: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        }
-      }
+      survey: true,
+      alumni: true
     },
     orderBy: {
       createdAt: 'desc'
@@ -26,10 +15,6 @@ export default async function TokensPage() {
   const totalTokens = await prisma.surveyToken.count();
 
   const surveys = await prisma.survey.findMany({
-    select: {
-      id: true,
-      title: true,
-    },
     orderBy: {
       createdAt: 'desc'
     }

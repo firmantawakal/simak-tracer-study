@@ -4,13 +4,7 @@ import { prisma } from '@/lib/prisma';
 export default async function ResponsesPage() {
   const responses = await prisma.response.findMany({
     include: {
-      survey: {
-        select: {
-          id: true,
-          title: true,
-          questions: true
-        }
-      }
+      survey: true
     },
     orderBy: {
       submittedAt: 'desc'

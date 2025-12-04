@@ -131,9 +131,9 @@ export async function searchAlumni(query: string, page: number = 1, limit: numbe
       prisma.alumni.findMany({
         where: {
           OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
-            { major: { contains: query, mode: 'insensitive' } },
+            { name: { contains: query } },
+            { email: { contains: query } },
+            { major: { contains: query } },
           ],
         },
         skip,
@@ -156,9 +156,9 @@ export async function searchAlumni(query: string, page: number = 1, limit: numbe
       prisma.alumni.count({
         where: {
           OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
-            { major: { contains: query, mode: 'insensitive' } },
+            { name: { contains: query } },
+            { email: { contains: query } },
+            { major: { contains: query } },
           ],
         },
       }),

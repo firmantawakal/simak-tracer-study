@@ -3,15 +3,27 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { logoutAdmin } from '@/app/actions/auth.actions';
 import { Home, Users, FileText, BarChart, Key, Settings, LogOut } from 'lucide-react';
 
 export function AdminNav() {
   const pathname = usePathname();
 
   const handleLogout = async () => {
-    await logoutAdmin();
-    window.location.href = '/admin/login';
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        window.location.href = '/admin/login';
+      } else {
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force redirect even if API call fails
+      window.location.href = '/admin/login';
+    }
   };
 
   const navigation = [
