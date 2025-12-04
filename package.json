@@ -1,26 +1,62 @@
 {
   "name": "simak-tracer-study",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Aplikasi Tracer Study Universitas Dumai",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
-    "next": "16.0.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "@hookform/resolvers": "^3.3.0",
+    "@prisma/client": "^6.0.0",
+    "@tailwindcss/postcss": "^4.1.17",
+    "bcryptjs": "^2.4.3",
+    "clsx": "^2.0.0",
+    "crypto": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.555.0",
+    "next": "15.0.0",
+    "nodemailer": "^6.9.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hook-form": "^7.47.0",
+    "tailwind-merge": "^2.0.0",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^13.0.0",
+    "@types/bcryptjs": "^2.4.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "15.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "postcss": "^8.4.0",
+    "prettier": "^3.0.0",
+    "prisma": "^6.0.0",
+    "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
