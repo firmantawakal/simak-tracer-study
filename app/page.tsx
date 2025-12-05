@@ -14,6 +14,7 @@ export default function Home() {
               <span className="text-white font-semibold text-lg">Universitas Dumai</span>
             </div>
             <nav className="hidden md:flex space-x-8">
+              <Link href="/surveys" className="text-gray-300 hover:text-white transition-colors">Survei</Link>
               <Link href="#features" className="text-gray-300 hover:text-white transition-colors">Fitur</Link>
               <Link href="#about" className="text-gray-300 hover:text-white transition-colors">Tentang</Link>
               <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">Kontak</Link>
@@ -46,22 +47,24 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl hover:bg-white/15 transition-all duration-300 group">
-                <div className="w-16 h-16 bg-blue-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">Portal Alumni</h3>
+                <h3 className="text-2xl font-bold text-white mb-4">Isi Survei</h3>
                 <p className="text-gray-300 mb-6">
-                  Bagikan perkembangan karir Anda dan bantu universitas meningkatkan kualitas pendidikan untuk generasi mendatang
+                  Partisipasi dalam survei tracer study dan bantu universitas meningkatkan kualitas pendidikan
                 </p>
-                <div className="flex items-center text-blue-300 font-medium">
-                  <span>Akses melalui email</span>
+                <Link
+                  href="/surveys"
+                  className="inline-flex items-center text-green-300 font-medium hover:text-green-200 transition-colors"
+                >
+                  <span>Lihat Survei Tersedia</span>
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </div>
+                </Link>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl hover:bg-white/15 transition-all duration-300 group">

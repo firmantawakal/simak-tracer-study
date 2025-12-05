@@ -39,13 +39,6 @@ export async function GET(request: NextRequest) {
               title: true,
               questions: true
             }
-          },
-          alumni: {
-            select: {
-              id: true,
-              name: true,
-              email: true
-            }
           }
         },
         skip,

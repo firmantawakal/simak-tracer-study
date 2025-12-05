@@ -3,7 +3,7 @@ import { verifyAdmin } from '@/lib/dal';
 import { prisma } from '@/lib/prisma';
 import { adminProfileSchema } from '@/lib/validation';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const admin = await verifyAdmin();
 

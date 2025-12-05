@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching surveys:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch surveys' },
+      { error: 'Gagal mengambil data survei' },
       { status: 500 }
     );
   }
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating survey:', error);
     return NextResponse.json(
-      { error: 'Failed to create survey' },
+      { error: 'Gagal membuat survei' },
       { status: 500 }
     );
   }

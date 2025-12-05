@@ -21,7 +21,7 @@ export async function POST(request: NextRequest, { params }: Params) {
 
     if (!survey) {
       return NextResponse.json(
-        { error: 'Survey not found' },
+        { error: 'Survei tidak ditemukan' },
         { status: 404 }
       );
     }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     // For now, just return the created tokens
 
     return NextResponse.json({
-      message: `Successfully generated ${newTokens.length} tokens for survey "${survey.title}"`,
+      message: `Berhasil membuat ${newTokens.length} token untuk survei "${survey.title}"`,
       tokens: newTokens,
       surveyTitle: survey.title,
       expiryDate: expiryDate.toISOString()
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest, { params }: Params) {
   } catch (error) {
     console.error('Error generating tokens:', error);
     return NextResponse.json(
-      { error: 'Failed to generate tokens' },
+      { error: 'Gagal membuat token' },
       { status: 500 }
     );
   }

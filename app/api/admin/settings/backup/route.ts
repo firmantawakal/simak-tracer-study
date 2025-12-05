@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdmin } from '@/lib/dal';
 import { prisma } from '@/lib/prisma';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     await verifyAdmin();
 
