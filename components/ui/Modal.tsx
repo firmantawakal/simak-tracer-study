@@ -41,8 +41,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} relative`}>
+    <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-start justify-center p-4 pt-8">
+      <div className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} relative my-auto`}>
         {title && (
           <div className="border-b border-gray-200 px-6 py-4">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>

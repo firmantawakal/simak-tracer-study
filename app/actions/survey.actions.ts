@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { verifyAdmin } from '@/lib/dal';
-import { createSurveySchema, CreateSurveyData } from '@/lib/validation';
+import { createSurveySchema } from '@/lib/validation';
 import { z } from 'zod';
 
 export async function getSurveys(page: number = 1, limit: number = 10) {

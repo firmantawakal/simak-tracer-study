@@ -18,11 +18,6 @@ interface ResponseWithDetails {
   answers: any;
   submittedAt: Date;
   survey: Survey;
-  alumni: {
-    id: string;
-    name: string;
-    email: string;
-  } | null;
 }
 
 interface ResponseManagementProps {
@@ -51,10 +46,14 @@ export function ResponseManagement({
   const totalPages = Math.ceil(totalResponses / itemsPerPage);
 
   const filteredResponses = responses.filter(response => {
+    const respondentInfo = response.answers?.respondentInfo || {};
+    const respondentName = respondentInfo.name || 'Unknown';
+    const respondentEmail = respondentInfo.email || 'Unknown';
+
     const matchesSearch = search === '' ||
       response.survey.title.toLowerCase().includes(search.toLowerCase()) ||
-      (response.alumni?.name.toLowerCase().includes(search.toLowerCase())) ||
-      (response.alumni?.email.toLowerCase().includes(search.toLowerCase()));
+      respondentName.toLowerCase().includes(search.toLowerCase()) ||
+      respondentEmail.toLowerCase().includes(search.toLowerCase());
 
     const matchesSurvey = selectedSurvey === '' || response.surveyId === selectedSurvey;
 
@@ -80,16 +79,53 @@ export function ResponseManagement({
   };
 
   const exportToCSV = () => {
-    const headers = ['Survey', 'Alumni Name', 'Alumni Email', 'Submitted At', 'Answers'];
+    // Get all unique questions from all responses to create dynamic headers
+    const allQuestions = new Map();
+    filteredResponses.forEach(response => {
+      const answerArray = response.answers?.answers || [];
+      answerArray.forEach((answer: any) => {
+        if (!allQuestions.has(answer.questionId)) {
+          allQuestions.set(answer.questionId, answer.question);
+        }
+      });
+    });
+
+    // Create headers
+    const baseHeaders = ['Survey', 'Respondent Name', 'Respondent Email', 'Graduation Year', 'Major', 'Submitted At'];
+    const questionHeaders = Array.from(allQuestions.values());
+    const headers = [...baseHeaders, ...questionHeaders];
+
+    // Create CSV rows
     const csvContent = [
       headers.join(','),
-      ...filteredResponses.map(response => [
-        response.survey.title,
-        response.alumni?.name || 'Unknown',
-        response.alumni?.email || 'Unknown',
-        new Date(response.submittedAt).toLocaleDateString(),
-        JSON.stringify(response.answers).replace(/"/g, '""')
-      ].map(field => `"${field}"`).join(','))
+      ...filteredResponses.map(response => {
+        const respondentInfo = response.answers?.respondentInfo || {};
+        const answerArray = response.answers?.answers || [];
+
+        // Create answer map for easy lookup
+        const answerMap = new Map();
+        answerArray.forEach((answer: any) => {
+          answerMap.set(answer.questionId, answer.answer);
+        });
+
+        // Build row with base info and answers
+        const baseInfo = [
+          response.survey.title,
+          respondentInfo.name || 'Unknown',
+          respondentInfo.email || 'Unknown',
+          respondentInfo.graduationYear || 'Unknown',
+          respondentInfo.major || 'Unknown',
+          new Date(response.submittedAt).toLocaleDateString()
+        ];
+
+        // Add answers in the same order as headers
+        const answers = Array.from(allQuestions.keys()).map(questionId => {
+          const answer = answerMap.get(questionId) || '';
+          return `"${String(answer).replace(/"/g, '""')}"`;
+        });
+
+        return [...baseInfo.map(field => `"${field}"`), ...answers].join(',');
+      })
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -117,7 +153,8 @@ export function ResponseManagement({
     const stats = questions.map(question => {
       const answers = surveyResponses
         .map(r => {
-          const answerObj = (r.answers as any[]).find((a: any) => a.question === question.question);
+          const answerArray = r.answers?.answers || [];
+          const answerObj = answerArray.find((a: any) => a.questionId === question.id);
           return answerObj?.answer;
         })
         .filter(Boolean);
@@ -210,46 +247,54 @@ export function ResponseManagement({
           <TableHeader>
             <TableRow>
               <TableHead>Survey</TableHead>
-              <TableHead>Alumni</TableHead>
+              <TableHead>Respondent</TableHead>
+              <TableHead>Graduation Year</TableHead>
               <TableHead>Submitted At</TableHead>
               <TableHead>Answers Count</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedResponses.map((response) => (
-              <TableRow key={response.id}>
-                <TableCell className="font-medium">{response.survey.title}</TableCell>
-                <TableCell>
-                  <div>
-                    <div className="font-medium">{response.alumni?.name || 'Unknown'}</div>
-                    <div className="text-sm text-gray-500">{response.alumni?.email || 'Unknown'}</div>
-                  </div>
-                </TableCell>
-                <TableCell>{new Date(response.submittedAt).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  {Array.isArray(response.answers) ? response.answers.length : 0}
-                </TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleViewResponse(response)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleViewStats(response.surveyId)}
-                    >
-                      <BarChart className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
+            {paginatedResponses.map((response) => {
+              const respondentInfo = response.answers?.respondentInfo || {};
+              const answerArray = response.answers?.answers || [];
+              return (
+                <TableRow key={response.id}>
+                  <TableCell className="font-medium">{response.survey.title}</TableCell>
+                  <TableCell>
+                    <div>
+                      <div className="font-medium">{respondentInfo.name || 'Unknown'}</div>
+                      <div className="text-sm text-gray-500">{respondentInfo.email || 'Unknown'}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm text-gray-600">{respondentInfo.graduationYear || 'Unknown'}</div>
+                  </TableCell>
+                  <TableCell>{new Date(response.submittedAt).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {answerArray.length || 0}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewResponse(response)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewStats(response.surveyId)}
+                      >
+                        <BarChart className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
               </TableRow>
-            ))}
+              );
+            })}
           </TableBody>
         </Table>
 
@@ -276,10 +321,10 @@ export function ResponseManagement({
       >
         {selectedResponse && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
               <div>
                 <div className="text-sm font-medium text-gray-500">Survey</div>
-                <div className="font-medium">{selectedResponse.survey.title}</div>
+                <div className="font-medium text-truncate">{selectedResponse.survey.title}</div>
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-500">Submitted At</div>
@@ -294,12 +339,21 @@ export function ResponseManagement({
                 </div>
               </div>
               <div>
-                <div className="text-sm font-medium text-gray-500">Alumni</div>
+                <div className="text-sm font-medium text-gray-500">Name</div>
                 <div className="font-medium">
-                  {selectedResponse.alumni?.name || 'Unknown'}
+                  {selectedResponse.answers?.respondentInfo?.name || 'Unknown'}
                 </div>
                 <div className="text-sm text-gray-500">
-                  {selectedResponse.alumni?.email || 'Unknown'}
+                  {selectedResponse.answers?.respondentInfo?.email || 'Unknown'}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-medium text-gray-500">Education</div>
+                <div className="font-medium">
+                  {selectedResponse.answers?.respondentInfo?.major || 'Unknown'}
+                </div>
+                <div className="text-sm text-gray-500">
+                  Class of {selectedResponse.answers?.respondentInfo?.graduationYear || 'Unknown'}
                 </div>
               </div>
             </div>
@@ -307,8 +361,8 @@ export function ResponseManagement({
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-4">Answers</h3>
               <div className="space-y-4">
-                {Array.isArray(selectedResponse.answers) &&
-                  selectedResponse.answers.map((answerObj: any, index: number) => (
+                {Array.isArray(selectedResponse.answers?.answers) &&
+                  selectedResponse.answers.answers.map((answerObj: any, index: number) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
                       <div className="font-medium text-gray-900">
                         {answerObj.question}
