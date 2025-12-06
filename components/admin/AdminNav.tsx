@@ -8,8 +8,7 @@ import {
   FileText,
   MessageSquare,
   Settings,
-  LogOut,
-  GraduationCap
+  LogOut
 } from 'lucide-react';
 
 const menuItems = [
@@ -32,11 +31,6 @@ const menuItems = [
     href: '/admin/responses',
     label: 'Respons',
     icon: MessageSquare
-  },
-  {
-    href: '/admin/tokens',
-    label: 'Token',
-    icon: GraduationCap
   },
   {
     href: '/admin/settings',
@@ -63,10 +57,12 @@ export function AdminNav() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-8">
-            <div className="flex items-center space-x-2">
-              <div className="bg-blue-600 text-white px-3 py-1 rounded-md">
-                <span className="font-bold text-lg">UD</span>
-              </div>
+            <div className="flex items-center space-x-3">
+              <img
+                src="/logo-unidum.png"
+                alt="Universitas Dumai Logo"
+                className="w-8 h-8 object-contain"
+              />
               <span className="font-semibold text-gray-900">
                 Tracer Study Admin
               </span>

@@ -8,7 +8,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Alert } from '@/components/ui/Alert';
 import { Pagination } from '@/components/ui/Pagination';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { Plus, Search, Edit, Trash2, Eye, Send, Copy, Users } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Eye, Send, Copy } from 'lucide-react';
 import { Survey } from '@prisma/client';
 
 interface SurveyManagementProps {
@@ -55,7 +55,6 @@ export function SurveyManagement({ initialSurveys, totalSurveys }: SurveyManagem
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showTokensModal, setShowTokensModal] = useState(false);
   const [editingSurvey, setEditingSurvey] = useState<Survey | null>(null);
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -174,7 +173,7 @@ export function SurveyManagement({ initialSurveys, totalSurveys }: SurveyManagem
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus survei ini? Ini juga akan menghapus semua token dan respons terkait.')) return;
+    if (!confirm('Apakah Anda yakin ingin menghapus survei ini? Ini juga akan menghapus semua respons terkait.')) return;
 
     try {
       const response = await fetch(`/api/admin/surveys/${id}`, {
@@ -211,26 +210,7 @@ export function SurveyManagement({ initialSurveys, totalSurveys }: SurveyManagem
     setShowModal(true);
   };
 
-  const generateTokens = async (surveyId: string) => {
-    try {
-      const response = await fetch(`/api/admin/surveys/${surveyId}/generate-tokens`, {
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Gagal membuat token');
-      }
-
-      const result = await response.json();
-      setAlert({ type: 'success', message: result.message || 'Token berhasil dibuat!' });
-      setSelectedSurvey(null);
-      setShowTokensModal(false);
-    } catch (error: any) {
-      setAlert({ type: 'error', message: error.message || 'Gagal membuat token' });
-    }
-  };
-
+  
   const copySurveyUrl = async (surveyId: string, surveyTitle: string) => {
     try {
       const surveyUrl = `${window.location.origin}/surveys/${surveyId}`;
@@ -394,17 +374,6 @@ export function SurveyManagement({ initialSurveys, totalSurveys }: SurveyManagem
                       ) : (
                         <Copy className="h-4 w-4" />
                       )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setSelectedSurvey(survey);
-                        setShowTokensModal(true);
-                      }}
-                      title="Buat Token"
-                    >
-                      <Users className="h-4 w-4" />
                     </Button>
                     <Button
                       size="sm"
@@ -604,53 +573,6 @@ export function SurveyManagement({ initialSurveys, totalSurveys }: SurveyManagem
         </form>
       </Modal>
 
-      {/* Tokens Modal */}
-      <Modal
-        isOpen={showTokensModal}
-        onClose={() => {
-          setShowTokensModal(false);
-          setSelectedSurvey(null);
-        }}
-        title="Buat Token Survei"
-        size="md"
-      >
-        {selectedSurvey && (
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">{selectedSurvey.title}</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Buat token survei untuk semua alumni. Setiap alumni akan menerima token unik untuk mengakses survei ini.
-              </p>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-blue-900 mb-2">Informasi Token:</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Token akan dikirim ke alamat email alumni</li>
-                <li>• Setiap token kedaluwarsa setelah 7 hari</li>
-                <li>• Token hanya dapat digunakan sekali</li>
-                <li>• Token yang ada untuk survei ini akan dinonaktifkan</li>
-              </ul>
-            </div>
-
-            <div className="flex justify-end space-x-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowTokensModal(false)}
-              >
-                Batal
-              </Button>
-              <Button
-                onClick={() => generateTokens(selectedSurvey.id)}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                <Send className="h-4 w-4 mr-2" />
-                Buat & Kirim Token
-              </Button>
-            </div>
           </div>
-        )}
-      </Modal>
-    </div>
   );
 }

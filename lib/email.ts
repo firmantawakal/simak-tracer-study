@@ -95,6 +95,11 @@ export async function sendSurveyEmail(
         <body>
           <div class="container">
             <div class="header">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <div style="display: inline-block; background-color: #1e40af; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                  <span style="color: white; font-size: 24px; font-weight: bold;">UD</span>
+                </div>
+              </div>
               <h1>Universitas Dumai</h1>
               <h2>Tracer Study Program</h2>
             </div>

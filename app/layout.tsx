@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'Tracer Study Universitas Dumai',
   description: 'Sistem Tracer Study untuk melacak perkembangan karir alumni Universitas Dumai',
   keywords: ['tracer study', 'alumni', 'universitas dumai', 'karir'],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

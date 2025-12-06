@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { Home, Users, FileText, BarChart, Key, Settings, LogOut } from 'lucide-react';
+import { Home, Users, FileText, BarChart, Settings, LogOut, Key } from 'lucide-react';
 
 export function AdminNav() {
   const pathname = usePathname();
@@ -40,10 +40,12 @@ export function AdminNav() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
-            <Link href="/admin/dashboard" className="flex items-center space-x-2">
-              <div className="bg-blue-600 text-white px-3 py-1 rounded-md">
-                <span className="font-bold text-lg">UD</span>
-              </div>
+            <Link href="/admin/dashboard" className="flex items-center space-x-3">
+              <img
+                src="/logo-unidum.png"
+                alt="Universitas Dumai Logo"
+                className="w-8 h-8 object-contain"
+              />
               <span className="font-semibold text-gray-900">
                 Tracer Study Admin
               </span>

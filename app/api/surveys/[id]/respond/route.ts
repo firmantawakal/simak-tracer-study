@@ -95,13 +95,10 @@ export async function POST(
       );
     }
 
-    // Create response with a dummy token hash for compatibility
-    const dummyTokenHash = `public_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-
     const response = await prisma.response.create({
       data: {
         surveyId,
-        tokenHash: dummyTokenHash,
+        tokenHash: `public_${Date.now()}`,
         answers: {
           ...validatedData,
           submittedAt: new Date().toISOString()
